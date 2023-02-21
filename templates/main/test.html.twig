@@ -1,39 +1,69 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Test</h1>
-    {# commentaire twig #}
-    {# création de variables #}
+{# Héritage #}
+{% extends 'base.html.twig' %}
 
-    {# exécuter du code #}
-    {%  set name = 'Sandra' %}
+{% block body %}
 
-    {# afficher du code #}
-    <h2>{{ name }}</h2>
+<h1>Test</h1>
+{# commentaire twig #}
+{# création de variables #}
 
-    {# concaténation du code grâce au tild ~ #}
-    <p>Hello {{ name ~ " " ~ name }}</p>
+{# exécuter du code #}
+{% set name = 'Sandra' %}
 
-    {# création d'un tableau #}
-    {% set colors = ['red', 'purple', 'green', 'yellow'] %}
-    {# boucler sur le tableau #}
-    {% for color in colors %}
-         <div>{{ color }}</div>
-        <div style="background-color: {{ color }}">{{  color }}</div>
-    {% endfor %}
+{# afficher du code #}
+<h2>{{ name }}</h2>
 
+{# concaténation du code grâce au tild ~ #}
+<p>Hello {{ name ~ " " ~ name }}</p>
 
+{# création d'un tableau #}
+{% set colors = ['red', 'purple', 'green', 'yellow'] %}
+{# boucler sur le tableau #}
+{% for color in colors %}
+    <div>{{ color }}</div>
+    <div style="background-color: {{ color }}">{{ color }}</div>
 
+    {# usage de loop - variable créee par for #}
+    {% if loop.first %}
+        <div>1ère itération</div>
+    {% endif %}
 
+    {# index de l'élément (index qui commence à 1) #}
+    <div>index de l'élément courant : {{ loop.index }} / {{ loop.length }}</div>
 
+    {% if loop.last %}
+        <div>Dernière itération</div>
+    {% endif %}
+    {# si le tableau est vide alors on passe dans le else #}
+{% else %}
+    <div>Pas d'éléments</div>
+{% endfor %}
 
+{# manipulation d'objets en Twig (jamais fait comme ça) #}
+{% set serie = {
+    title : "Lord fo the Ring",
+    year : 2022,
+    platform : "Amazon",
+    }
+%}
+<h2>Titre de la série : {{ serie.title }}</h2>
 
-</body>
-</html>
+{# boucler sur un objet #}
+{% for key, val in serie %}
+    <div>{{ key }} : {{ val }}</div>
+{% endfor %}
+
+{# les filtres #}
+{# possible de chainer les filtres #}
+<div>{{ name | upper | lower | capitalize }} : {{ name | length }}</div>
+
+{# affiche les couleurs en les séparant par un tiret #}
+<div>{{ colors | join("-") }}</div>
+
+{# date du jour #}
+<div>{{ "now" | date("Y-M-d")}}</div>
+<div>{{ "now" | date("d-m-Y")}}</div>
+
+{% endblock %}
+
+{% block title %}{{ parent() }} | Test{% endblock %}
