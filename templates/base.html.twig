@@ -2,6 +2,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
+
+    {# lien pour normaliser style sur tous les navigateurs #}
+    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+
+    {# lien vers page de style css #}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    {# liens pour font google #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap" rel="stylesheet">
+
+    {# afficher icone dans onglet de la page #}
+    <link rel="icon" href="{{ asset ('img/icon.png') }}">
+
     <title>{% block title %}Series{% endblock %}</title>
     {# pour faire de l'affichage plus propre #}
     {#        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>"> #}
@@ -15,6 +30,24 @@
     {#        {% endblock %} #}
 </head>
 <body>
-{% block body %}{% endblock %}
+{#créer en faisant div.container + tab#}
+<div class="container">
+<header>
+    {# afficher image cliquable en haut du site + h1 pour le référencement #}
+    <h1>
+        <a href="{{ path('main_home') }}">
+            <img src="{{ asset('img/logo.svg') }}" alt="Series | Home">
+        </a>
+    </h1>
+
+    {# inclure menu de navigation de la page nav.html.twig #}
+    {% include 'menu/nav.html.twig' %}
+</header>
+{% block body %}Body par défaut{% endblock %}
+<footer>
+    {% include 'menu/nav.html.twig' %}
+</footer>
+</div>
 </body>
 </html>
+
