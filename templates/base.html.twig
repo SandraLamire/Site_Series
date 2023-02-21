@@ -29,24 +29,27 @@
     {#            {{ encore_entry_script_tags('app') }} #}
     {#        {% endblock %} #}
 </head>
-<body>
-{#créer en faisant div.container + tab#}
-<div class="container">
-<header>
-    {# afficher image cliquable en haut du site + h1 pour le référencement #}
-    <h1>
-        <a href="{{ path('main_home') }}">
-            <img src="{{ asset('img/logo.svg') }}" alt="Series | Home">
-        </a>
-    </h1>
 
-    {# inclure menu de navigation de la page nav.html.twig #}
-    {% include 'menu/nav.html.twig' %}
-</header>
-{% block body %}Body par défaut{% endblock %}
-<footer>
-    {% include 'menu/nav.html.twig' %}
-</footer>
+<body>
+{# créer en faisant div.container + tab #}
+<div class="container">
+    <header>
+        {# afficher image cliquable en haut du site + h1 pour le référencement #}
+        <h1>
+            <a href="{{ path('main_home') }}">
+                <img src="{{ asset('img/logo.svg') }}" alt="Series | Home">
+            </a>
+        </h1>
+
+        {# inclure menu de navigation de la page nav.html.twig #}
+        {% include 'menu/nav.html.twig' %}
+    </header>
+    <main>
+        {% block body %}Body par défaut{% endblock %}
+    </main>
+    <footer>
+        {% include 'menu/nav.html.twig' %}
+    </footer>
 </div>
 </body>
 </html>

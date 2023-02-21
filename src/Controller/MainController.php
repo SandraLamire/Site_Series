@@ -20,7 +20,16 @@ class MainController extends AbstractController
         // ex : die("Hello World !"); affiche hello world sur la page
         // http://localhost/series/public/home
 
-        return $this->render('main/home.html.twig');
+        // passage de variables en paramètre
+        $username = "<h1>Sandra</h1>";
+        // variables en tableau associatif
+        $serie = ['title' => 'Community', 'year' => 'Ouf', 'plateform' => 'NBC'];
+        // ajout des paramètres dans un tableau associatif
+        // la clé devient le nom de la variable côté twig
+        return $this->render('main/home.html.twig', [
+            "name" => $username,
+            "serie" => $serie
+        ]);
     }
 
     // Annotations : commentaires interprétés avant php8

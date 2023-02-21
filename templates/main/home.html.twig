@@ -6,6 +6,26 @@
 
 {# surcharge du bloc body = écrase les données de base #}
 {% block body %}
+
     <h1>Welcome to Series !</h1>
-{%  endblock %}
+
+    {# appel des paramètres passés dans le render du controleur #}
+    <div>{{ name }}</div>
+
+    {# filtre raw permet de désactiver la protection symfony contre les failles XSS #}
+    {# permet d'interpréter les balises html passées dans MainController #}
+    <div>{{ name | raw }}</div>
+
+    {# supprimer complètement le code HTML #}
+    <div>{{ name | striptags }}</div>
+
+    <h2>Serie's detail</h2>
+
+    <ul>
+    {% for key, val in serie %}
+        <li>{{ key }} : {{ val }}</li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
 
