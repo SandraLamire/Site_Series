@@ -6,7 +6,7 @@
 
         {% for serie in series %}
             <article>
-                {# affiche le poster de chaque serie#}
+                {# affiche le poster de chaque serie #}
                 <a href="{{ path('serie_show', {'id': serie.id}) }}">
                     <img src="{{ asset('img/posters/series/' ~ serie.poster) }}" alt="{{ serie.name }}">
                 </a>

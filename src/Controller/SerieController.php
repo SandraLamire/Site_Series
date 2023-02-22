@@ -46,8 +46,9 @@ class SerieController extends AbstractController
         // qui renvoie un singleton
         // de même pour entityManager (n'est plus utilisé depuis Symfony
         // version 5.4)
-    public function add(SerieRepository        $serieRepository,
-                        EntityManagerInterface $entityManager): Response
+    public function add(
+        SerieRepository $serieRepository,
+        EntityManagerInterface $entityManager): Response
     {
         // créer une instance de serie
         $serie = new Serie();
@@ -101,16 +102,21 @@ class SerieController extends AbstractController
     // ATTENTION AU CONFLIT DE ROUTES :
     // donc utiliser requirements qui attend un int (\d+ = au moins 1 chiffre)
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
+    // PAram converter : Si Serie $id au lieu de int $id, Serie $id récupère
+    // tout l'objet
     public function show(int $id, SerieRepository $serieRepository): Response
     {
         $serie = $serieRepository->find($id);
+        // si $serie est null, renvoyer 1 erreur 404
+        if(!$serie){
+            throw $this->createNotFoundException('Oups, serie not found !');
+        }
         dump($serie);
-        // TODO Récupération des infos de la série
+        // récupération des infos de la série
         return $this->render('serie/show.html.twig', [
             // 'serie' = nom de la variable dans twig dont la valeur est $serie
             'serie' => $serie
     ]);
     }
-
 
 }
