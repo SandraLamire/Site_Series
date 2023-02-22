@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @extends ServiceEntityRepository<Serie>
  *
  * @method Serie|null find($id, $lockMode = null, $lockVersion = null)
+ * // récupère le 1er élément trouvé
  * @method Serie|null findOneBy(array $criteria, array $orderBy = null)
  * @method Serie[]    findAll()
  * @method Serie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
