@@ -26,12 +26,20 @@ class SerieController extends AbstractController
 
         // récupérer la liste des séries terminées triées par popularité
         // avec un tableau de clauses WHERE et ORDER BY
-        // en limitant la liste de résultats à 10 à partir du 5ème résultat
+        // en limitant la liste de résultats à 10 à partir du 5ᵉ résultat
         // $series = $serieRepository->findBy(['status' => 'ended'],
         // ['popularity' => 'DESC'], 10, 5);
 
         // récupération des 50 series les mieux notées
         $series = $serieRepository->findBy([], ['vote'=>'DESC'], 50);
+
+        // autre façon de faire une requête :
+        // méthode magique qui crée dynamiquement une requête en fct des
+        // attributs de l'instance de l'objet
+        // $series = $serieRepository->findByStatus('ended');
+
+        // appel à la requête DQL de la classe SerieRepository
+        $series = $serieRepository->findBestSeries();
 
         dump($series);
 
@@ -108,7 +116,7 @@ class SerieController extends AbstractController
     {
         $serie = $serieRepository->find($id);
         // si $serie est null, renvoyer 1 erreur 404
-        if(!$serie){
+        if (!$serie) {
             throw $this->createNotFoundException('Oups, serie not found !');
         }
         dump($serie);
@@ -116,7 +124,10 @@ class SerieController extends AbstractController
         return $this->render('serie/show.html.twig', [
             // 'serie' = nom de la variable dans twig dont la valeur est $serie
             'serie' => $serie
-    ]);
+        ]);
     }
+
+
+
 
 }

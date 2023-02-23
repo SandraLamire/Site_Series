@@ -39,7 +39,37 @@ class SerieRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findBestSeries(){
+ /*     // REQUETE EN DQL
+        // récup des séries avec vote > 8 et popularité > 100
+        // ordonnées par popularité
+        $dql = "SELECT s FROM App\Entity\Serie s
+                WHERE s.vote > 8
+                AND s.popularity > 100
+                ORDER BY s.popularity DESC";
+        // récup du manager et transforme le string en objet de requête
+        $query = $this->getEntityManager()->createQuery($dql);
+        // ajoute une limite de résultats
+        $query->setMaxResults(50);
+        return $query->getResult();
+*/
+        // REQUETE QueryBuilder
+        // récupère toutes les infos de l'objet
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->addOrderBy('s.popularity', 'DESC')
+            ->andWhere('s.vote > 8')
+            ->andWhere('s.popularity > 100');
+        // renvoi d'une instance de query
+        $query = $qb->getQuery();
+        return $query->getResult();
 
+        // ou tout chainé
+        // return $this->createQueryBuilder('s')->addOrderBy('s.popularity','DESC')->andWhere('s.vote > 8')->andWhere('s.popularity > 100')->getQuery()->getResult();
+    }
+
+
+//    QUERYBUILDER
 //    /**
 //     * @return Serie[] Returns an array of Serie objects
 //     */
@@ -54,7 +84,7 @@ class SerieRepository extends ServiceEntityRepository
 //            ->getResult()
 //        ;
 //    }
-
+//
 //    public function findOneBySomeField($value): ?Serie
 //    {
 //        return $this->createQueryBuilder('s')
