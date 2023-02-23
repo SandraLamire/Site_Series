@@ -6,6 +6,9 @@ use App\Repository\SerieRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+// prepersiste : modifier entité avant de l'enregistrer (pour date par défaut
+// si pas saisie)
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
 class Serie
 {
@@ -212,5 +215,13 @@ class Serie
         $this->dateModified = $dateModified;
 
         return $this;
+    }
+
+    // permet de mettre une date par défaut si pas saisie
+    // grâce à la ligne #[ORM\PrePersist] mis au-dessus de la classe
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->setDateCreated(new \DateTime());
     }
 }

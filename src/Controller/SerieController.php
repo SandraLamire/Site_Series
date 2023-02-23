@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Serie;
+use App\Form\SerieType;
 use App\Repository\SerieRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 // ATTRIBUT de la class qui permet de mutualiser les infos
@@ -22,7 +23,7 @@ class SerieController extends AbstractController
     {
         // TODO récupérer la liste des séries en BDD
         // grâce aux méthodes générées automatiquement dans repository
-        // $series = $serieRepository->findAll();
+         $series = $serieRepository->findAll();
 
         // récupérer la liste des séries terminées triées par popularité
         // avec un tableau de clauses WHERE et ORDER BY
@@ -31,7 +32,7 @@ class SerieController extends AbstractController
         // ['popularity' => 'DESC'], 10, 5);
 
         // récupération des 50 series les mieux notées
-        $series = $serieRepository->findBy([], ['vote'=>'DESC'], 50);
+        // $series = $serieRepository->findBy([], ['vote'=>'DESC'], 50);
 
         // autre façon de faire une requête :
         // méthode magique qui crée dynamiquement une requête en fct des
@@ -39,7 +40,7 @@ class SerieController extends AbstractController
         // $series = $serieRepository->findByStatus('ended');
 
         // appel à la requête DQL de la classe SerieRepository
-        $series = $serieRepository->findBestSeries();
+        // $series = $serieRepository->findBestSeries();
 
         dump($series);
 
@@ -56,35 +57,34 @@ class SerieController extends AbstractController
         // version 5.4)
     public function add(
         SerieRepository $serieRepository,
-        EntityManagerInterface $entityManager): Response
+        Request $request
+    ): Response
     {
         // créer une instance de serie
         $serie = new Serie();
-        // appel aux setters de Serie.php pour créer une nouvelle série
-        $serie
-            ->setName('the Magician')
-            ->setStatus('Ended')
-            ->setBackdrop('backdrop.png')
-            ->setDateCreated(new \DateTime())
-            ->setGenres("Comedy")
-            ->setFirstAirDate(new \DateTime("2022-02-02"))
-            // date du jour moins 6 mois
-            ->setLastAirDate(new \DateTime("- 6 month"))
-            ->setPopularity(850.52)
-            ->setPoster("poster.png")
-            ->setTmdbId(123456)
-            ->setVote(8.5);
+        // instance de formulaire
+        $serieForm = $this->createForm(SerieType::class, $serie);
 
-        dump($serie);
+        // méthode qui extrait les éléments du formulaire de la requête
+        $serieForm->handleRequest($request);
 
-        // utilisation de l'entityManager
-        // persist() prépare la requête, flush() l'enregistre dans la BDD
-        $entityManager->persist($serie);
-        $entityManager->flush();
+        if($serieForm->isSubmitted()){
+            // sauvegarde en BDD de la nouvelle série
+            $serieRepository->save($serie, true);
 
-        dump($serie);
+            // message flash qui stocke un cookie pour le lire et le supprimer après
+            // demander à twig de checker si messages flash (dans base.html.twig)
+            $this->addFlash('success','Serie added !');
 
-// OU
+            // redirection vers page détail de la série après soumission du formulaire
+            return $this->redirectToRoute('serie_show',['id'=>$serie->getId()]);
+        }
+        // renvoi du formulaire à la vue
+        return $this->render('serie/add.html.twig', [
+            'serieForm' => $serieForm->createView()
+        ]);
+
+
 //        // sauvegarder l'entité $serie créee ci-dessus
 //        // en l'enregistrant dans la BDD
 //        $serieRepository ->save($serie, true);
@@ -96,13 +96,9 @@ class SerieController extends AbstractController
 //        $serieRepository ->save($serie, true);
 //
 //        dump($serie);
+//
+//        $serieRepository->remove($serie, true);
 
-        $serieRepository->remove($serie, true);
-
-        dump($serie);
-
-        // TODO Créer un formulaire d'ajout de série
-        return $this->render('serie/add.html.twig');
     }
 
     // contrôleur pour voir le détail d'une série

@@ -39,6 +39,14 @@
         {% include 'menu/nav.html.twig' %}
     </header>
     <main>
+        {# afficher messages flash stockés #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block body %}Body par défaut{% endblock %}
     </main>
     <footer>
