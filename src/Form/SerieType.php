@@ -21,6 +21,7 @@ class SerieType extends AbstractType
             // de base, si rien de précisé, required = true
             ->add('overview', TextareaType::class, [
                 'required'=>false,
+                // ajouter class="raw" dans l'html
                 'attr'=>['class'=>'raw']
             ])
             // select
@@ -65,7 +66,11 @@ class SerieType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Serie::class,
+            'data_class' => Serie::class
+            // ,
+            // le temps de faire les tests sur les formulaires
+            // à retirer après tests
+            // 'required' => false
         ]);
     }
 }

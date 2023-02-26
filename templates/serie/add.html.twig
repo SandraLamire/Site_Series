@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+{#appliquer css spécifique pour ce formulaire#}
+{% form_theme serieForm 'view/formTheme/formTheme.html.twig'%}
 
 {% block title %}
     {{ parent() }} | Add

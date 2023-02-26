@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SerieRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 // prepersiste : modifier entité avant de l'enregistrer (pour date par défaut
 // si pas saisie)
@@ -17,18 +18,34 @@ class Serie
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Please provide a name for the serie !")]
+    #[Assert\Length(
+        min:2,
+        max:255,
+        minMessage:"Minimum {{ limit }} characters please",
+        maxMessage:"Maximum {{ limit }} characters please"
+    )]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\Length(
+        max:3000,
+        maxMessage:"Maximum {{ limit }} characters please"
+    )]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $overview = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Choice(['canceled', 'ended', 'returning'])]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 1)]
-    private ?string $vote = null;
 
+    private ?string $vote = null;
+    #[Assert\Range(
+        notInRangeMessage: "Vote out of bound",
+        min:0,
+        max:10)]
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
     private ?string $popularity = null;
 
@@ -36,9 +53,15 @@ class Serie
     private ?string $genres = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "Please provide a date !")]
+    #[Assert\LessThanOrEqual(propertyPath: "lastAirDate",
+        message: "This date must be less than last air date")]
     private ?\DateTimeInterface $firstAirDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "Please provide a date !")]
+    #[Assert\GreaterThanOrEqual(propertyPath: "firstAirDate",
+        message: "This date must be greater than first air date")]
     private ?\DateTimeInterface $lastAirDate = null;
 
     #[ORM\Column(length: 255)]
@@ -138,7 +161,7 @@ class Serie
         return $this->firstAirDate;
     }
 
-    public function setFirstAirDate(\DateTimeInterface $firstAirDate): self
+    public function setFirstAirDate(?\DateTimeInterface $firstAirDate): self
     {
         $this->firstAirDate = $firstAirDate;
 
@@ -150,7 +173,7 @@ class Serie
         return $this->lastAirDate;
     }
 
-    public function setLastAirDate(\DateTimeInterface $lastAirDate): self
+    public function setLastAirDate(?\DateTimeInterface $lastAirDate): self
     {
         $this->lastAirDate = $lastAirDate;
 

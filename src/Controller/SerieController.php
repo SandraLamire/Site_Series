@@ -65,10 +65,11 @@ class SerieController extends AbstractController
         // instance de formulaire
         $serieForm = $this->createForm(SerieType::class, $serie);
 
+        // SOUMISSION DU FORMULAIRE (grâce à handleRequest de HttpFoundation)
         // méthode qui extrait les éléments du formulaire de la requête
         $serieForm->handleRequest($request);
 
-        if($serieForm->isSubmitted()){
+        if($serieForm->isSubmitted() && $serieForm->isValid()){
             // sauvegarde en BDD de la nouvelle série
             $serieRepository->save($serie, true);
 
