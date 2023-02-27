@@ -17,6 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SerieRepository extends ServiceEntityRepository
 {
+    const SERIE_LIMIT = 50;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Serie::class);
@@ -39,8 +40,29 @@ class SerieRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function findBestSeries(){
- /*     // REQUETE EN DQL
+    public function findBestSeries(int $page){
+        // page 1 -> 0 à 49; page 2-> 50 à 99 ...
+
+        $offset = ($page-1) * self::SERIE_LIMIT;
+
+        // REQUETE QueryBuilder
+        // récupère toutes les infos de l'objet
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->addOrderBy('s.popularity', 'DESC')
+        // renvoi d'une instance de query
+            ->setFirstResult($offset)
+            ->setMaxResults(self::SERIE_LIMIT);
+        $query = $qb->getQuery();
+        return $query->getResult();
+
+        // ou tout chainé
+        // return $this->createQueryBuilder('s')->addOrderBy('s.popularity','DESC')->andWhere('s.vote > 8')->andWhere('s.popularity > 100')->getQuery()->getResult();
+    }
+
+    public function findBestSeriesDQL(int $opage)
+    {
+        // REQUETE EN DQL
         // récup des séries avec vote > 8 et popularité > 100
         // ordonnées par popularité
         $dql = "SELECT s FROM App\Entity\Serie s
@@ -52,27 +74,12 @@ class SerieRepository extends ServiceEntityRepository
         // ajoute une limite de résultats
         $query->setMaxResults(50);
         return $query->getResult();
-*/
-        // REQUETE QueryBuilder
-        // récupère toutes les infos de l'objet
-        $qb = $this->createQueryBuilder('s');
-        $qb
-            ->addOrderBy('s.popularity', 'DESC')
-            ->andWhere('s.vote > 8')
-            ->andWhere('s.popularity > 100');
-        // renvoi d'une instance de query
-        $query = $qb->getQuery();
-        return $query->getResult();
-
-        // ou tout chainé
-        // return $this->createQueryBuilder('s')->addOrderBy('s.popularity','DESC')->andWhere('s.vote > 8')->andWhere('s.popularity > 100')->getQuery()->getResult();
     }
 
-
-//    QUERYBUILDER
-//    /**
-//     * @return Serie[] Returns an array of Serie objects
-//     */
+       //    QUERYBUILDER
+       //    /**
+       //     * @return Serie[] Returns an array of Serie objects
+       //     */
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('s')

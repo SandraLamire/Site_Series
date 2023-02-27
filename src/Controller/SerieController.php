@@ -17,9 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class SerieController extends AbstractController
 {
     // contrôleur pour afficher liste de séries
-    #[Route('/list', name: 'list')]
+    #[Route('/list/{page}', name: 'list', requirements:['page'=>'\d+'], methods: 'GET')]
     // SerieRepository en param pour récupérer la liste des séries en BDD
-    public function list(SerieRepository $serieRepository): Response
+    // $page en paramètre avec valeur par défaut : page 1
+    public function list(SerieRepository $serieRepository, int $page = 1): Response
     {
         // TODO récupérer la liste des séries en BDD
         // grâce aux méthodes générées automatiquement dans repository
@@ -39,13 +40,26 @@ class SerieController extends AbstractController
         // attributs de l'instance de l'objet
         // $series = $serieRepository->findByStatus('ended');
 
-        // appel à la requête DQL de la classe SerieRepository
-        // $series = $serieRepository->findBestSeries();
+        // nombre de séries dans la table
+        $nbSerieMax = $serieRepository->count([]);
+        $maxPage = ceil($nbSerieMax / SerieRepository::SERIE_LIMIT);
+
+        if($page >=1 && $page <= $maxPage){
+            // appel à la requête DQL de la classe SerieRepository
+            $series = $serieRepository->findBestSeries($page);
+        }else{
+            throw $this->createNotFoundException('Oups ! Page not found !');
+        }
 
         dump($series);
 
         // renvoyer la liste de toutes les series à la vue (= au fichier twig)
-        return $this->render('serie/list.html.twig',['series' => $series]);
+        return $this->render('serie/list.html.twig',[
+            'series' => $series,
+            // garder en mémoire numéro page courante
+            'currentPage' => $page,
+            'maxPage' => $maxPage
+        ]);
     }
 
 
