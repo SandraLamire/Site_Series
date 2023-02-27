@@ -19,6 +19,20 @@
             <div>Aired from : {{ serie.firstAirDate | date('d-m-Y') }} to {{ serie.lastAirDate | date('d-m-Y') }}</div>
             {# filtre nl2br transforme les saut de ligne en <br> #}
             <div>{{ serie.overview | nl2br }}</div>
+            {# afficher les saisons #}
+            <section>
+                <h3>Seasons :</h3>
+                {% for season in serie.seasons %}
+                <article>
+                    <img src="{{ asset('img/posters/seasons/' ~ season.poster) }}"
+                         alt="{{ serie.name }} season {{ season.number }}">
+                    <div>
+                        <h4>Season #{{ season.number }}</h4>
+                        <div>{{ season.overview }}</div>
+                    </div>
+                </article>
+                {% endfor %}
+            </section>
         </div>
     </div>
 {% endblock %}
