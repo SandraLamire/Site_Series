@@ -20,7 +20,7 @@ class SeasonController extends AbstractController
         $seasonForm = $this->createForm(SeasonType::class, $season);
         // extrait les infos du formulaire
         $seasonForm->handleRequest($request);
-        if($seasonForm->isSubmitted() && $seasonForm->isValid()){
+        if ($seasonForm->isSubmitted() && $seasonForm->isValid()) {
             // sauvegarde
             $seasonRepository->save($season, true);
             // ajout flash
@@ -28,7 +28,7 @@ class SeasonController extends AbstractController
             // rediriger vers page
             return $this->redirectToRoute('serie_show', ['id' => $season->getSerie()->getId()]);
         }
-        return $this->render('season/add.html.twig',[
+        return $this->render('season/add.html.twig', [
             // renvoi le formulaire à la vue
             'seasonForm' => $seasonForm -> createView()
         ]);

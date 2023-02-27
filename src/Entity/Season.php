@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\SeasonRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 #[ORM\Entity(repositoryClass: SeasonRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -144,7 +143,8 @@ class Season
     }
 
     #[ORM\PrePersist]
-    public function setNewSeason(){
+    public function setNewSeason()
+    {
         $this->setDateCreated(new \DateTime());
     }
 }

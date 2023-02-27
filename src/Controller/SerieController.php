@@ -24,7 +24,7 @@ class SerieController extends AbstractController
     {
         // TODO récupérer la liste des séries en BDD
         // grâce aux méthodes générées automatiquement dans repository
-         $series = $serieRepository->findAll();
+        // $series = $serieRepository->findAll();
 
         // récupérer la liste des séries terminées triées par popularité
         // avec un tableau de clauses WHERE et ORDER BY
@@ -44,17 +44,17 @@ class SerieController extends AbstractController
         $nbSerieMax = $serieRepository->count([]);
         $maxPage = ceil($nbSerieMax / SerieRepository::SERIE_LIMIT);
 
-        if($page >=1 && $page <= $maxPage){
+        if ($page >=1 && $page <= $maxPage) {
             // appel à la requête DQL de la classe SerieRepository
             $series = $serieRepository->findBestSeries($page);
-        }else{
+        } else {
             throw $this->createNotFoundException('Oups ! Page not found !');
         }
 
         dump($series);
 
         // renvoyer la liste de toutes les series à la vue (= au fichier twig)
-        return $this->render('serie/list.html.twig',[
+        return $this->render('serie/list.html.twig', [
             'series' => $series,
             // garder en mémoire numéro page courante
             'currentPage' => $page,
@@ -83,16 +83,16 @@ class SerieController extends AbstractController
         // méthode qui extrait les éléments du formulaire de la requête
         $serieForm->handleRequest($request);
 
-        if($serieForm->isSubmitted() && $serieForm->isValid()){
+        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
             // sauvegarde en BDD de la nouvelle série
             $serieRepository->save($serie, true);
 
             // message flash qui stocke un cookie pour le lire et le supprimer après
             // demander à twig de checker si messages flash (dans base.html.twig)
-            $this->addFlash('success','Serie added !');
+            $this->addFlash('success', 'Serie added !');
 
             // redirection vers page détail de la série après soumission du formulaire
-            return $this->redirectToRoute('serie_show',['id'=>$serie->getId()]);
+            return $this->redirectToRoute('serie_show', ['id'=>$serie->getId()]);
         }
         // renvoi du formulaire à la vue
         return $this->render('serie/add.html.twig', [
@@ -138,7 +138,22 @@ class SerieController extends AbstractController
         ]);
     }
 
-
-
-
+    #[Route('/remove/{id}',name: 'remove')]
+    // injection de $serieRepository pour avoir accès à sa méthode remove
+    public function remove(int $id, SerieRepository $serieRepository)
+    {
+        // récupérer la série grâce à son id
+        $serie = $serieRepository->find($id);
+        $this->addFlash('warning', 'Serie deleted !');
+        // la supprimer si elle existe
+        if ($serie) {
+            // true pour flusher
+            $serieRepository->remove($serie, true);
+        } else {
+            // sinon exception
+            throw $this->createNotFoundException("This serie can't be deleted !");
+        }
+        // rediriger vers page d'accueil
+        return $this->redirectToRoute('serie_list');
+    }
 }

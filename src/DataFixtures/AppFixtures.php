@@ -17,8 +17,9 @@ class AppFixtures extends Fixture
         $this->addSeries($manager, $faker);
     }
 
-    public function addSeries(ObjectManager $manager, Generator $generator){
-        for ($i=0; $i < 50; $i++){
+    public function addSeries(ObjectManager $manager, Generator $generator)
+    {
+        for ($i=0; $i < 50; $i++) {
             $serie = new Serie();
 
             $serie
@@ -28,7 +29,7 @@ class AppFixtures extends Fixture
                 // renvoyer 3 mots de Lorem au hasard
                 // + implode car renvoie un tableau
                 ->setName(implode(" ", $generator->words(3)))
-                ->setVote($generator->numberBetween(0,10))
+                ->setVote($generator->numberBetween(0, 10))
                 ->setStatus($generator->randomElement(['ended', 'returning', 'cancelled']))
                 ->setPoster("poster.png")
                 ->setTmdbId(123)

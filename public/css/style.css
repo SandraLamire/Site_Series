@@ -1,7 +1,5 @@
 body {
-    background: linear-gradient(#000000, #132135);
-    background-attachment: fixed;
-    background-position: center center;
+    background: linear-gradient(#000000, #132135) fixed center center;
     background-size: cover;
     color: #EEE;
 }
@@ -145,6 +143,10 @@ textarea{
 .error ul li {
     list-style: none;
     color: red;
+}
+
+.flash-warning{
+    background-color: orangered;
 }
 
 /************************** Module 7 Relations *****************************************/

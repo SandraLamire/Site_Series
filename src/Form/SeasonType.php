@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Season;
 use App\Entity\Serie;
 use App\Repository\SerieRepository;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -38,7 +37,7 @@ class SeasonType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Associated serie',
                 // trier les séries par ordre alphabétique
-                'query_builder'=> function(SerieRepository $serieRepository){
+                'query_builder'=> function (SerieRepository $serieRepository) {
                     $qb = $serieRepository->createQueryBuilder('s');
                     $qb->addOrderBy('s.name');
                     return $qb;

@@ -11,6 +11,14 @@
             <img src="{{ asset('img/posters/series/' ~ serie.poster) }}" alt="{{ serie.name }}">
         </div>
         <div class="serie-details-infos">
+
+            <div class="flex_div">
+                {# bouton suppression saison #}
+                <a class="link_button" href="{{ path('serie_remove', {'id':serie.id}) }}"
+{#                   {# javascript #}
+                onclick="return confirm('Are you sure to delete this serie ?')">Delete serie</a>
+            </div>
+
             <h2>{{ serie.name }}</h2>
             <div>Users ratings : {{ serie.vote }}</div>
             <div>Categorized in : {{ serie.genres }}</div>

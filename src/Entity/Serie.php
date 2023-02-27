@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-// prepersiste : modifier entité avant de l'enregistrer (pour date par défaut
+// prePersist : modifier entité avant de l'enregistrer (pour date par défaut
 // si pas saisie)
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
@@ -81,7 +81,8 @@ class Serie
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateModified = null;
 
-    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class)]
+    // fetch : 'Eager' fait la jointure
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, cascade: ['remove', 'persist'])]
     private Collection $seasons;
 
     public function __construct()
