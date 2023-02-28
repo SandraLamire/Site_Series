@@ -56,6 +56,9 @@ class SerieRepository extends ServiceEntityRepository
             // récupération des colonnes de la jointure
             ->addSelect('sea')
             ->addOrderBy('s.popularity', 'DESC')
+            // ->andWhere('s.vote > 8')
+            // ->andWhere('s.popularity > 100')
+
         // renvoi d'une instance de query
             ->setFirstResult($offset)
             ->setMaxResults(self::SERIE_LIMIT);
@@ -70,21 +73,21 @@ class SerieRepository extends ServiceEntityRepository
         // return $this->createQueryBuilder('s')->addOrderBy('s.popularity','DESC')->andWhere('s.vote > 8')->andWhere('s.popularity > 100')->getQuery()->getResult();
     }
 
-    public function findBestSeriesDQL(int $page)
-    {
-        // REQUETE EN DQL
-        // récup des séries avec vote > 8 et popularité > 100
-        // ordonnées par popularité
-        $dql = "SELECT s FROM App\Entity\Serie s
-                WHERE s.vote > 8
-                AND s.popularity > 100
-                ORDER BY s.popularity DESC";
-        // récup du manager et transforme le string en objet de requête
-        $query = $this->getEntityManager()->createQuery($dql);
-        // ajoute une limite de résultats
-        $query->setMaxResults(50);
-        return $query->getResult();
-    }
+//    public function findBestSeriesDQL(int $page)
+//    {
+//        // REQUETE EN DQL
+//        // récup des séries avec vote > 8 et popularité > 100
+//        // ordonnées par popularité
+//        $dql = "SELECT s FROM App\Entity\Serie s
+//                WHERE s.vote > 8
+//                AND s.popularity > 100
+//                ORDER BY s.popularity DESC";
+//        // récup du manager et transforme le string en objet de requête
+//        $query = $this->getEntityManager()->createQuery($dql);
+//        // ajoute une limite de résultats
+//        $query->setMaxResults(50);
+//        return $query->getResult();
+//    }
 
        //    QUERYBUILDER
        //    /**

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Serie;
 use App\Form\SerieType;
 use App\Repository\SerieRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +24,7 @@ class SerieController extends AbstractController
     // $page en paramètre avec valeur par défaut : page 1
     public function list(SerieRepository $serieRepository, int $page = 1): Response
     {
-        // TODO récupérer la liste des séries en BDD
+        // Récupérer la liste des séries en BDD
         // grâce aux méthodes générées automatiquement dans repository
         // $series = $serieRepository->findAll();
 
@@ -65,6 +67,9 @@ class SerieController extends AbstractController
 
     // contrôleur pour ajouter un film à la liste de séries
     #[Route('/add', name: 'add')]
+    // Mettre IsGranted que si pas sécuriser globalement dans security.yaml
+    // #[IsGranted("ROLE_USER")]
+
     //injection de dépendance = autowiring pour créer une instance de serieRepository
         // qui renvoie un singleton
         // de même pour entityManager (n'est plus utilisé depuis Symfony
@@ -74,9 +79,12 @@ class SerieController extends AbstractController
         Request $request
     ): Response
     {
+        //renvoie une 403
+        //$this->>createAccessDeniedException();
+
         // créer une instance de serie
         $serie = new Serie();
-        // instance de formulaire
+        // instance de formulaire liée à une instance de serie
         $serieForm = $this->createForm(SerieType::class, $serie);
 
         // SOUMISSION DU FORMULAIRE (grâce à handleRequest de HttpFoundation)
@@ -84,6 +92,20 @@ class SerieController extends AbstractController
         $serieForm->handleRequest($request);
 
         if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+            // upload photo
+            // récup des infos non mappées dans le champ poster
+            // @var type le $file pour permettre l'autocomplétion
+            /**
+             * @var UploadedFile $file
+             */
+            $file = $serieForm->get('poster')->getData();
+            // renommer l'objet récupéré, uniqid permet de générer un nombre aléatoire
+            $newFileName = $serie->getName() . "-" . uniqid() . "-" . $file->guessExtension();
+            // copie du fichier dans répertoire de sauvegarde + nouveau nom
+            $file->move('img/posters/series', $newFileName);
+            // setter le nouveau nom du fichier
+            $serie->setPoster($newFileName);
+
             // sauvegarde en BDD de la nouvelle série
             $serieRepository->save($serie, true);
 
@@ -128,9 +150,10 @@ class SerieController extends AbstractController
         $serie = $serieRepository->find($id);
         // si $serie est null, renvoyer 1 erreur 404
         if (!$serie) {
-            throw $this->createNotFoundException('Oups, serie not found !');
+            // lancer une erreur 404 si la série n'existe pas
+            throw $this->createNotFoundException('Oops, serie not found !');
         }
-        dump($serie);
+        // dump($serie);
         // récupération des infos de la série
         return $this->render('serie/show.html.twig', [
             // 'serie' = nom de la variable dans twig dont la valeur est $serie
@@ -144,11 +167,12 @@ class SerieController extends AbstractController
     {
         // récupérer la série grâce à son id
         $serie = $serieRepository->find($id);
-        $this->addFlash('warning', 'Serie deleted !');
+
         // la supprimer si elle existe
         if ($serie) {
             // true pour flusher
             $serieRepository->remove($serie, true);
+            $this->addFlash('warning', 'Serie deleted !');
         } else {
             // sinon exception
             throw $this->createNotFoundException("This serie can't be deleted !");

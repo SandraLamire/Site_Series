@@ -31,6 +31,7 @@ class SeasonType extends AbstractType
             // ->add('dateModified')
 
             // classe de type Serie (on ne crée pas une instance, on donne un type)
+            // pour récupérer les données saisons de la BDD
             ->add('serie', EntityType::class, [
                 'class' => Serie::class,
                 // attribut pour affichage des séries à l'écran (ici, selon le nom)

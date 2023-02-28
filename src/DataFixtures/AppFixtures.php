@@ -19,7 +19,7 @@ class AppFixtures extends Fixture
 
     public function addSeries(ObjectManager $manager, Generator $generator)
     {
-        for ($i=0; $i < 50; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $serie = new Serie();
 
             $serie

@@ -6,10 +6,13 @@ use App\Entity\Serie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
+
 
 class SerieType extends AbstractType
 {
@@ -58,7 +61,20 @@ class SerieType extends AbstractType
                 'widget'=>'single_text'
             ])
             ->add('backdrop')
-            ->add('poster')
+            // upload de l'image
+            ->add('poster', FileType::class, [
+                // ne met pas l'adresse temporaire de l'image dans serie
+                'mapped'=> false,
+                // contraintes sur l'upload
+                'constraints' => [
+                    new Image([
+                        // 5 megaOctets = 5M
+                        'maxSize' => '5000k',
+                        // mimesTypes = extensions des fichiers (par défaut image/*)
+                        'mimesTypesMessages' => 'Image format not allowed !'
+                    ])
+                ]
+            ])
             ->add('tmdbId')
         ;
     }

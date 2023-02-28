@@ -6,10 +6,10 @@
     <div class="flex_div flex_between">
         {# lien navigation entre les pages #}
         {% if currentPage > 1 %}
-        <a class="link_button" href="{{ path('serie_list', {'page' : currentPage-1}) }}">Previous page</a>
+        <a class="link_button" href="{{ path('serie_list', {'page' : currentPage - 1}) }}">Previous page</a>
         {% endif %}
         {% if currentPage < maxPage %}
-        <a class="link_button" href="{{ path('serie_list', {'page' : currentPage+1}) }}">Next page</a>
+        <a class="link_button" href="{{ path('serie_list', {'page' : currentPage + 1}) }}">Next page</a>
         {% endif %}
     </div>
 

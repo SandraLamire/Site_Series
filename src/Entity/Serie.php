@@ -56,14 +56,18 @@ class Serie
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(message: "Please provide a date !")]
-    #[Assert\LessThanOrEqual(propertyPath: "lastAirDate",
-        message: "This date must be less than last air date")]
+    #[Assert\LessThanOrEqual(
+        propertyPath: "lastAirDate",
+        message: "This date must be less than last air date"
+    )]
     private ?\DateTimeInterface $firstAirDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(message: "Please provide a date !")]
-    #[Assert\GreaterThanOrEqual(propertyPath: "firstAirDate",
-        message: "This date must be greater than first air date")]
+    #[Assert\GreaterThanOrEqual(
+        propertyPath: "firstAirDate",
+        message: "This date must be greater than first air date"
+    )]
     private ?\DateTimeInterface $lastAirDate = null;
 
     #[ORM\Column(length: 255)]
@@ -81,7 +85,7 @@ class Serie
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateModified = null;
 
-    // fetch : 'Eager' fait la jointure
+    // fetch : 'Eager' fait la jointure mais préférable en manuelle
     #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, cascade: ['remove', 'persist'])]
     private Collection $seasons;
 
