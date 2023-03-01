@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Serie;
 use App\Form\SerieType;
 use App\Repository\SerieRepository;
+use App\Utils\Uploader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -76,7 +77,8 @@ class SerieController extends AbstractController
         // version 5.4)
     public function add(
         SerieRepository $serieRepository,
-        Request $request
+        Request $request,
+        Uploader $uploader
     ): Response
     {
         //renvoie une 403
@@ -92,17 +94,30 @@ class SerieController extends AbstractController
         $serieForm->handleRequest($request);
 
         if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+
             // upload photo
             // récup des infos non mappées dans le champ poster
             // @var type le $file pour permettre l'autocomplétion
             /**
-             * @var UploadedFile $file
+            * @var UploadedFile $file
              */
+
+//            $file = $serieForm->get('poster')->getData();
+//            // renommer l'objet récupéré, uniqid permet de générer un nombre aléatoire
+//            $newFileName = $serie->getName() . "-" . uniqid() . "-" . $file->guessExtension();
+//            // copie du fichier dans répertoire de sauvegarde + nouveau nom
+//            $file->move('img/posters/series', $newFileName);
+//
+            // upload crée en service
             $file = $serieForm->get('poster')->getData();
-            // renommer l'objet récupéré, uniqid permet de générer un nombre aléatoire
-            $newFileName = $serie->getName() . "-" . uniqid() . "-" . $file->guessExtension();
-            // copie du fichier dans répertoire de sauvegarde + nouveau nom
-            $file->move('img/posters/series', $newFileName);
+            // appel de l'uploader
+            $newFileName = $uploader->upload(
+                $file,
+                // récupérer le paramètre de services.yaml
+                $this->getParameter('upload_serie_poster'),
+                $serie->getName()
+            );
+
             // setter le nouveau nom du fichier
             $serie->setPoster($newFileName);
 

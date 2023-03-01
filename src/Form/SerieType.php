@@ -10,9 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
-
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SerieType extends AbstractType
 {
@@ -71,12 +72,11 @@ class SerieType extends AbstractType
                         // 5 megaOctets = 5M
                         'maxSize' => '5000k',
                         // mimesTypes = extensions des fichiers (par défaut image/*)
-                        'mimesTypesMessages' => 'Image format not allowed !'
+                        'mimeTypesMessage' => 'Image format not allowed !'
                     ])
                 ]
             ])
-            ->add('tmdbId')
-        ;
+            ->add('tmdbId');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
