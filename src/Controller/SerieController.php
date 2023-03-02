@@ -54,7 +54,7 @@ class SerieController extends AbstractController
             throw $this->createNotFoundException('Oups ! Page not found !');
         }
 
-        dump($series);
+        // dump($series);
 
         // renvoyer la liste de toutes les series à la vue (= au fichier twig)
         return $this->render('serie/list.html.twig', [

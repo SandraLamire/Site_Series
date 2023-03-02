@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 // prePersist : modifier entité avant de l'enregistrer (pour date par défaut
@@ -18,6 +19,8 @@ class Serie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    // pour choisir ce que renvoit API
+    #[Groups('serie_api')]
     private ?int $id = null;
 
     #[Assert\NotBlank(message: "Please provide a name for the serie !")]
@@ -28,6 +31,7 @@ class Serie
         maxMessage:"Maximum {{ limit }} characters please"
     )]
     #[ORM\Column(length: 255)]
+    #[Groups('serie_api')]
     private ?string $name = null;
 
     #[Assert\Length(
