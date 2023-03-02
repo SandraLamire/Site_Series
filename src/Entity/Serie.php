@@ -86,6 +86,7 @@ class Serie
     private ?\DateTimeInterface $dateModified = null;
 
     // fetch : 'Eager' fait la jointure mais préférable en manuelle
+    // si plusieurs pages car génère trop de requêtes
     #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, cascade: ['remove', 'persist'])]
     private Collection $seasons;
 

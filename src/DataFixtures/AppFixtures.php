@@ -14,7 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AppFixtures extends Fixture
 {
     // créer un constructeur
-    // lignes 22 et ... peuvent être remplacer par private devant param du construct
+    // lignes 19 peut être remplacer par private devant param du construct
     // = public function __construct(private EntityManagerInterface $entityManager){...
     private EntityManagerInterface $entityManager;
     private Generator $faker;

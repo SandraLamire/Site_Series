@@ -137,7 +137,7 @@ class SerieController extends AbstractController
         ]);
 
 
-//        // sauvegarder l'entité $serie créee ci-dessus
+//        // sauvegarder l'entité $serie créée ci-dessus
 //        // en l'enregistrant dans la BDD
 //        $serieRepository ->save($serie, true);
 //
