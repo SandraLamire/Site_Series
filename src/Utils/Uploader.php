@@ -11,6 +11,7 @@ class Uploader
         // TODO faire vérif que le fichier existe
 
         // création d'un nouveau nom
+        // puis lancer composer require symfony/uid dans le termianl
         $newFileName = $name . "-" . uniquid(). "-" . $file->guessExtension();
         // copie du fichier dans le répertoire de sauvegarde en le renommant
         $file->move($directory, $newFileName);
