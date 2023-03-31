@@ -6,10 +6,13 @@
     {{ parent() }} | Add
 {% endblock %}
 
+{%  var ='<strong>titre<:>strong>' %}
+    {{  var | raw }}
 {% block body %}
     <h2>Add a new serie</h2>
 
-    {# déclenche l'affichage du formulaire de SerieType #}
+
+    {# déclenche l'affichage du formulaire complet de SerieType #}
     {# {{ form(serieForm) }}#}
 
     {# ajout de css #}

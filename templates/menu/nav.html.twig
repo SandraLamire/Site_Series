@@ -9,7 +9,7 @@
             <li><a href="{{ path('serie_add') }}">Add a new serie</a></li>
             <li><a href="{{ path('season_add') }}">Add a new season</a></li>
 
-            {# si l'utilisateur a le rôle admin, rediriger vers dashboard #}
+            {# si l'utilisateur a le rôle admin, afficher lien vers vers dashboard #}
             {% if is_granted('ROLE_ADMIN') %}
                 <li><a href="{{ path('admin_dashboard') }}">Dashboard</a></li>
             {% endif %}

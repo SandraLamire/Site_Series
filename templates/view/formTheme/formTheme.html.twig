@@ -2,6 +2,7 @@
     <div class="label">{{ form_label(form) }}</div>
     <div>
         <div class="error"> {{ form_errors(form) }}</div>
+        {# form_widget rend ce qui permet de saisir la donnée uniquement (case à cocher, bouton radio, champ…) #}
         <div class="widget"> {{ form_widget(form) }}</div>
     </div>
 {% endblock %}

@@ -44,7 +44,6 @@ class SerieRepository extends ServiceEntityRepository
     public function findBestSeries(int $page)
     {
         // page 1 -> 0 à 49; page 2-> 50 à 99 ...
-
         $offset = ($page-1) * self::SERIE_LIMIT;
 
         // REQUETE QueryBuilder
@@ -59,7 +58,7 @@ class SerieRepository extends ServiceEntityRepository
             // ->andWhere('s.vote > 8')
             // ->andWhere('s.popularity > 100')
 
-        // renvoi d'une instance de query
+            // renvoi d'une instance de query
             ->setFirstResult($offset)
             ->setMaxResults(self::SERIE_LIMIT);
 

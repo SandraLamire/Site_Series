@@ -23,7 +23,7 @@ class SerieController extends AbstractController
     #[Route('/list/{page}', name: 'list', requirements:['page'=>'\d+'], methods: 'GET')]
     // SerieRepository en param pour récupérer la liste des séries en BDD
     // $page en paramètre avec valeur par défaut : page 1
-    public function list(SerieRepository $serieRepository, int $page = 1): Response
+    public function list(EntitySerieRepository $serieRepository, int $page = 1): Response
     {
         // Récupérer la liste des séries en BDD
         // grâce aux méthodes générées automatiquement dans repository
