@@ -126,8 +126,8 @@ class SerieController extends AbstractController
 
             // message flash qui stocke un cookie pour le lire et le supprimer après
             // demander à twig de checker si messages flash (dans base.html.twig)
-            $this->addFlash('success', 'Serie added !');
 
+            $this->addFlash('success', 'Serie added !');
             // redirection vers page détail de la série après soumission du formulaire
             return $this->redirectToRoute('serie_show', ['id'=>$serie->getId()]);
         }
